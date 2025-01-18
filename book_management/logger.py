@@ -1,6 +1,8 @@
-from loguru import logger
-import uuid
 import time
+import uuid
+
+from loguru import logger
+
 
 def logging_middleware(get_response):
     def middleware(request):
@@ -9,7 +11,6 @@ def logging_middleware(get_response):
 
         # Add context to all loggers in all views
         with logger.contextualize(request_id=request_id):
-
             request.start_time = time.time()
 
             response = get_response(request)
