@@ -12,6 +12,7 @@ djangorestframework = "^3.15.2"
 pymongo = "^4.10.1"
 django-mongodb-engine = { git = "https://github.com/django-nonrel/mongodb-engine" }
 ruff = "^0.9.2"
+loguru = "^0.7.3"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
