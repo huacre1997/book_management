@@ -17,6 +17,7 @@ mongoengine = "^0.29.1"
 django-environ = "^0.12.0"
 django-rest-framework-mongoengine = "^3.4.1"
 django-cors-headers = "^4.6.0"
+black = "^24.10.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
@@ -31,6 +32,9 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 90
 target-version = "py312"
+
+[tool.ruff.lint]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 ignore = ["E501"]
 select = [
     "F",   # pyflakes
@@ -42,23 +46,20 @@ select = [
     "G",   # logging
     "ARG", # unused args
 ]
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-first-party = ["apps"]
 section-order = [
     "future",
     "standard-library",
     "third-party",
     "first-party",
-    "tests",
     "local-folder",
 ]
 
-[tool.ruff.isort.sections]
+[tool.ruff.lint.isort.sections]
 "tests" = ["tests"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "**/settings/*" = ["E402", "F405", "F403"]
 
 
