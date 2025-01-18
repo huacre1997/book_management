@@ -369,6 +369,16 @@ reference = "HEAD"
 resolved_reference = "1314786975d3d17fb1a2e870dfba004158a5e431"
 
 [[package]]
+name = "django-rest-framework-mongoengine"
+version = "3.4.1"
+description = "MongoEngine support for Django Rest Framework."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-rest-framework-mongoengine-3.4.1.tar.gz", hash = "sha256:cabb60f2b8ecf6ceaa13550b47dde0b8f2fe9b6f7b69be681e059cf31b51d729"},
+]
+
+[[package]]
 name = "djangorestframework"
 version = "3.15.2"
 description = "Web APIs for Django, made easy."
@@ -858,4 +868,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "71982a2e279d482e01dc8cda12c5772888ae5878c55024f57a02a6f4724ada84"
+content-hash = "3d05a2f28b9c35b851175c58ec7210cba6e6529f01353d4ae17b114528f18afa"
