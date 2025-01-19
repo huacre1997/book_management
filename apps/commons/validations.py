@@ -4,7 +4,9 @@ from mongoengine import Document
 from rest_framework.exceptions import ValidationError
 
 
-def validate_unique_field(value: str, model: Type[Document], filter_params: dict[str, str| bool]) -> str:
+def validate_unique_field(
+    value: str, model: Type[Document], filter_params: dict[str, str | bool]
+) -> str:
     """
     Verifica si ya existe un registro con el mismo valor y parámetros de filtrado.
     Lanza un ValidationError si el registro existe.

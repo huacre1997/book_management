@@ -11,3 +11,9 @@ class GenreSerializer(serializers.DocumentSerializer):
 
     def validate_name(self, value: str):
         return validate_unique_field(value, Genre, {"name": value, "is_active": True})
+
+
+class RetrieveGenreSerializer(serializers.DocumentSerializer):
+    class Meta:
+        model = Genre
+        exclude = ["is_active", "created_at", "updated_at"]

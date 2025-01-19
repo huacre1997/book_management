@@ -6,5 +6,4 @@ from apps.commons.viewset import BaseViewset
 class AuthorViewSet(BaseViewset):
     lookup_field = "id"
     serializer_class = AuthorSerializer
-    queryset = Author.objects.active() # type: ignore
-
+    queryset = Author.objects.active()  # type: ignore
