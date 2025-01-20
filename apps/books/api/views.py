@@ -13,11 +13,13 @@ from apps.books.api.serializers import (
 )
 from apps.books.models import Book
 from apps.commons.generics import RetrieveUpdateDestroyBase
+from apps.commons.utils.pagination import CustomPagination
 
 
 class BookListView(generics.ListAPIView):
     serializer_class = BookListSerializer
     queryset = Book.objects.active()  # type: ignore
+    pagination_class = CustomPagination
 
 
 class BookCreateView(generics.CreateAPIView):
