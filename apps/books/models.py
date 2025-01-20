@@ -13,9 +13,9 @@ class BookQuerySet(QuerySet):
 
 class Book(BaseModel):
     title = fields.StringField(required=True, max_length=255)
-    author = fields.ReferenceField(Author)
-    published_date = fields.DateTimeField(default=timezone.now)
-    genre = fields.ReferenceField(Genre)
+    author = fields.ReferenceField(Author, dbref=True, null=False)
+    published_date = fields.DateField(default=timezone.now)
+    genre = fields.ReferenceField(Genre, dbref=True, null=False)
     price = fields.DecimalField(max_digits=10, decimal_places=2)
 
     meta = {"queryset_class": BookQuerySet}

@@ -10,12 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from datetime import timedelta
+
 import mongoengine
 from environ import Env, Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 ROOT_DIR = Path(__file__) - 2
 
+# Cargar variables de entorno desde el archivo .env
 env = Env(
     ENV_FILE=(str, ROOT_DIR(".env")),
     MONGO_USERNAME=(str, "username"),
@@ -26,13 +29,15 @@ env = Env(
     DJANGO_STATIC_URL=(str, "static/"),
 )
 
-# Take environment variables from .env file
+# Leer las variables de entorno desde el archivo .env
 env.read_env(env("ENV_FILE"))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("DJANGO_SECRET_KEY")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -44,10 +49,14 @@ ALLOWED_HOSTS = ["*"]
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
+    "django_mongoengine",
+    "django_mongoengine.mongo_auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "apps.users",
+    "apps.books",
 ]
 
 THIRD_PARTY_APPS = [
@@ -136,10 +145,56 @@ STATIC_URL = env.str("DJANGO_STATIC_URL")
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-# MongoDB settings
+
+# -----------------------------------------------
+# Configuración de base de datos (MongoDB)
+# -----------------------------------------------
+
+# Configuración para conectar MongoDB usando mongoengine
 mongoengine.connect(
-    db=env("MONGO_NAME"),
+    db=env("MONGO_DB"),
     host=f"mongodb+srv://{env('MONGO_HOST')}/",
     username=env("MONGO_USERNAME"),
     password=env("MONGO_PASSWORD"),
 )
+
+MONGODB_DATABASES = {"default": {"name": "book_management"}}
+
+DATABASES = {"default": {"ENGINE": "django.db.backends.dummy"}}
+
+MONGOENGINE_USER_DOCUMENT = "apps.users.models.CustomUser"
+
+# ---------------------------------------------
+# Configuración de sesiones con MongoDB
+# ---------------------------------------------
+SESSION_ENGINE = "django_mongoengine.sessions"
+
+# --------------------------------------------------------
+# Configuración de Autenticación y Permisos
+# --------------------------------------------------------
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    # BAcjend personalizado login email
+    "book_management.authentication.CustomAuthBackend",
+]
+
+# ---------------------------------------------
+# Configuración de Django REST Framework
+# ---------------------------------------------
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        # Autenticación JWT
+        "rest_framework_simplejwt_mongoengine.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        # Autenticación para todas las vistas
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+# ---------------------------------------------
+# Configuración de Simple JWT MongoEngine
+# ---------------------------------------------
+
+SIMPLE_JWT_MONGOENGINE = {"ACCESS_TOKEN_LIFETIME": timedelta(minutes=10)}

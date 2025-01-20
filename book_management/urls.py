@@ -19,6 +19,10 @@ from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import include, path
 from django.views.decorators.http import require_GET
+from rest_framework_simplejwt_mongoengine.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 
 @require_GET
@@ -35,7 +39,10 @@ def server_status(_):
 urlpatterns = [
     path("", server_status),
     path("admin/", admin.site.urls),
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/books/", include("apps.books.api.urls")),
     path("api/authors/", include("apps.authors.api.urls")),
     path("api/genres/", include("apps.genres.api.urls")),
+    path("api/users/", include("apps.users.api.urls")),
 ]

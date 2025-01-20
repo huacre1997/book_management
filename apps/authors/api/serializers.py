@@ -7,7 +7,7 @@ from apps.commons.validations import validate_unique_field
 class AuthorSerializer(serializers.DocumentSerializer):
     class Meta:
         model = Author
-        exclude = ["is_active"]
+        exclude = ["is_active", "updated_at", "created_at"]
 
     def validate_name(self, value: str) -> str:
         return validate_unique_field(value, Author, {"name": value, "is_active": True})
@@ -16,4 +16,4 @@ class AuthorSerializer(serializers.DocumentSerializer):
 class RetrieveAuthorSerializer(serializers.DocumentSerializer):
     class Meta:
         model = Author
-        exclude = ["is_active", "created_at", "updated_at"]
+        exclude = ["is_active", "updated_at", "created_at"]
