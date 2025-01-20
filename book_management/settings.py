@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from datetime import timedelta
 
 import mongoengine
@@ -20,17 +21,17 @@ ROOT_DIR = Path(__file__) - 2
 
 # Cargar variables de entorno desde el archivo .env
 env = Env(
-    ENV_FILE=(str, ROOT_DIR(".env")),
     MONGO_USERNAME=(str, "username"),
     MONGO_PASSWORD=(str, "password"),
-    MONGO_DB=(str, "db"),
+    MONGO_NAME=(str, "db"),
     MONGO_HOST=(str, "localhost"),
     DJANGO_SECRET_KEY=(str, "DJANGO_SECRET_KEY"),
     DJANGO_STATIC_URL=(str, "static/"),
 )
 
 # Leer las variables de entorno desde el archivo .env
-env.read_env(env("ENV_FILE"))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -151,11 +152,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # -----------------------------------------------
 
 # Configuración para conectar MongoDB usando mongoengine
+
+MONGO_USERNAME = env("MONGO_USERNAME")
+MONGO_PASSWORD = env("MONGO_PASSWORD")
+MONGO_NAME = env("MONGO_NAME")
+MONGO_HOST = env("MONGO_HOST")
+
 mongoengine.connect(
-    db=env("MONGO_DB"),
-    host=f"mongodb+srv://{env('MONGO_HOST')}/",
-    username=env("MONGO_USERNAME"),
-    password=env("MONGO_PASSWORD"),
+    db=MONGO_NAME,
+    host=f"mongodb+srv://{MONGO_HOST}/",
+    username=MONGO_USERNAME,
+    password=MONGO_PASSWORD,
 )
 
 MONGODB_DATABASES = {"default": {"name": "book_management"}}
@@ -175,7 +182,7 @@ SESSION_ENGINE = "django_mongoengine.sessions"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    # BAcjend personalizado login email
+    # BAckend personalizado login email
     "book_management.authentication.CustomAuthBackend",
 ]
 
